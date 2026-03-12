@@ -569,37 +569,33 @@
         // YouTube API Key - Get your free key from: https://console.cloud.google.com/apis/credentials
         const YOUTUBE_API_KEY = 'AIzaSyCJwEwafmu6GGWkTAqFgZrIXoqiS5gtMJ8'; // Replace with your API key
 
-        // Map verse themes to Arabic search terms
-        const verseThemes = {
-            'love': 'ترنيمة محبة الله',
-            'peace': 'ترنيمة سلام المسيح',
-            'hope': 'ترنيمة رجاء',
-            'salvation': 'ترنيمة خلاص',
-            'grace': 'ترنيمة نعمة',
-            'shepherd': 'ترنيمة الراعي الصالح',
-            'comfort': 'ترنيمة تعزية',
-            'strength': 'ترنيمة قوة',
-            'joy': 'ترنيمة فرح',
-            'protection': 'ترنيمة حماية الرب'
-        };
-
         function getSearchTermForVerse(verseText, bookName) {
-            const text = verseText.toLowerCase();
+            // Extract key words from the verse for better search results
+            // Remove common words and keep meaningful content
+            let searchText = verseText;
 
-            // Try to match themes from verse content
-            if (text.includes('محبة') || text.includes('حب')) return verseThemes.love;
-            if (text.includes('سلام')) return verseThemes.peace;
-            if (text.includes('رجاء') || text.includes('امل')) return verseThemes.hope;
-            if (text.includes('خلاص')) return verseThemes.salvation;
-            if (text.includes('نعمة')) return verseThemes.grace;
-            if (text.includes('راعي')) return verseThemes.shepherd;
-            if (text.includes('تعزية') || text.includes('عزاء')) return verseThemes.comfort;
-            if (text.includes('قوة')) return verseThemes.strength;
-            if (text.includes('فرح')) return verseThemes.joy;
-            if (text.includes('يحفظ') || text.includes('حماية')) return verseThemes.protection;
+            // Common Arabic words to remove for better search
+            const stopWords = ['في', 'من', 'إلى', 'على', 'أن', 'هو', 'هي', 'أنا', 'أنت', 'هم', 'لا',
+                             'ما', 'قد', 'كان', 'لم', 'لن', 'قال', 'و', 'أو', 'لكن', 'ثم', 'ف',
+                             'ال', 'هذا', 'ذلك', 'التي', 'الذي', 'كل', 'بعض', 'أي'];
 
-            // Default to general praise
-            return 'ترنيمة مسيحية عربية';
+            // Split into words and filter
+            let words = searchText.split(' ').filter(word => {
+                word = word.trim();
+                return word.length > 2 && !stopWords.includes(word);
+            });
+
+            // Take first 5-8 meaningful words to keep search focused
+            let searchWords = words.slice(0, 8).join(' ');
+
+            // If we have meaningful words, use them with "ترنيمة"
+            // Otherwise fall back to book name search
+            if (searchWords.length > 10) {
+                return `ترنيمة ${searchWords}`;
+            } else {
+                // Fallback: use book name with generic hymn search
+                return `ترنيمة مسيحية ${bookName}`;
+            }
         }
 
         // Curated list of known embeddable Arabic Christian hymns as fallbacks
