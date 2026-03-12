@@ -1,10 +1,527 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Hello World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماذا يقول لك الله اليوم؟</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #4169E1;
+            color: white;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #3154c7;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .verse-container {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-right: 5px solid #4169E1;
+            min-height: 100px;
+            display: none;
+        }
+
+        .verse-container.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        #videoContainer {
+            margin-top: 30px;
+        }
+
+        #player {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        #videoContainer iframe {
+            border-radius: 10px;
+            border: none;
+        }
+
+        @media (max-width: 600px) {
+            #player {
+                max-width: 100%;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .verse-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .verse-reference {
+            font-size: 16px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .loading {
+            color: #4169E1;
+            font-size: 18px;
+        }
+
+        .error {
+            color: #d32f2f;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello World</h1>
+    <div class="container">
+        <h1>ماذا يقول لك الله اليوم؟</h1>
+
+        <button id="getVerseBtn" onclick="getRandomVerse()">أخبرني</button>
+
+        <div id="verseContainer" class="verse-container">
+            <div id="verseContent"></div>
+            <div id="videoContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Load YouTube IFrame Player API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // YouTube Player instance
+        let player;
+        let playerReady = false;
+
+        // Curated list of genuinely positive and encouraging verses
+        // These are handpicked verses known for their uplifting and loving messages
+        let positiveVerses = [];
+        let isLoading = true;
+
+        // Load curated positive verses from the API
+        async function loadBibleData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/maatheusgois/bible/main/versions/ar/svd.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load Bible data');
+                }
+                const bibleData = await response.json();
+
+                // Map of book IDs to names
+                const bookNames = {
+                    'jn': 'يوحنا', 'ps': 'مزامير', 'is': 'إشعياء', 'mt': 'متى',
+                    'rom': 'رومية', 'phi': 'فيلبي', '1jn': '1 يوحنا', 'jer': 'إرميا',
+                    'prv': 'أمثال', '1pt': '1 بطرس', 'eph': 'أفسس', 'col': 'كولوسي',
+                    'heb': 'عبرانيين', '2cor': '2 كورنثوس', 'jas': 'يعقوب'
+                };
+
+                // Handpicked verse references (book ID, chapter, verse) - known positive verses
+                const curatedVerses = [
+                    // John - God's love
+                    ['jn', 3, 16],  // For God so loved the world
+                    ['jn', 14, 27], // Peace I leave with you
+                    ['jn', 15, 9],  // As the Father loved me
+                    ['jn', 16, 33], // I have overcome the world
+
+                    // Psalms - Comfort and protection
+                    ['ps', 23, 1],  // The Lord is my shepherd
+                    ['ps', 23, 4],  // Even though I walk through valley
+                    ['ps', 27, 1],  // The Lord is my light
+                    ['ps', 46, 1],  // God is our refuge
+                    ['ps', 91, 1],  // He who dwells in shelter
+                    ['ps', 91, 4],  // He will cover you
+                    ['ps', 103, 8], // The Lord is compassionate
+                    ['ps', 118, 6], // The Lord is with me
+                    ['ps', 121, 2], // My help comes from the Lord
+                    ['ps', 139, 14], // I am wonderfully made
+
+                    // Isaiah - Hope and strength
+                    ['is', 40, 31], // Those who hope in the Lord
+                    ['is', 41, 10], // Do not fear, I am with you
+                    ['is', 43, 2],  // When you pass through waters
+                    ['is', 54, 10], // My unfailing love
+
+                    // Matthew - Blessings
+                    ['mt', 5, 3],   // Blessed are the poor in spirit
+                    ['mt', 5, 4],   // Blessed are those who mourn
+                    ['mt', 5, 9],   // Blessed are the peacemakers
+                    ['mt', 11, 28], // Come to me all who are weary
+
+                    // Romans - Love and assurance
+                    ['rom', 5, 8],  // God demonstrates his love
+                    ['rom', 8, 28], // All things work for good
+                    ['rom', 8, 38], // Nothing can separate us
+                    ['rom', 8, 39], // From the love of God
+                    ['rom', 15, 13], // May the God of hope
+
+                    // Philippians - Joy and peace
+                    ['phi', 4, 4],  // Rejoice in the Lord always
+                    ['phi', 4, 6],  // Do not be anxious
+                    ['phi', 4, 7],  // Peace of God
+                    ['phi', 4, 13], // I can do all things
+                    ['phi', 4, 19], // God will meet all your needs
+
+                    // 1 John - Love
+                    ['1jn', 3, 1],  // How great is the love
+                    ['1jn', 4, 8],  // God is love
+                    ['1jn', 4, 9],  // God showed his love
+                    ['1jn', 4, 16], // God is love
+                    ['1jn', 4, 18], // Perfect love drives out fear
+
+                    // Jeremiah - Plans and hope
+                    ['jer', 29, 11], // Plans to prosper you
+                    ['jer', 31, 3],  // I have loved you
+
+                    // Proverbs - Trust and guidance
+                    ['prv', 3, 5],   // Trust in the Lord
+                    ['prv', 3, 6],   // He will make your paths straight
+
+                    // 1 Peter - Care and grace
+                    ['1pt', 5, 7],   // Cast all your anxiety
+
+                    // Ephesians - Grace and love
+                    ['eph', 2, 8],   // By grace you are saved
+                    ['eph', 3, 17],  // Rooted in love
+                    ['eph', 3, 18],  // Grasp how wide and long
+
+                    // Colossians - Peace
+                    ['col', 3, 15],  // Let peace of Christ rule
+
+                    // Hebrews - Faith
+                    ['heb', 13, 5],  // Never will I leave you
+                    ['heb', 13, 6],  // The Lord is my helper
+
+                    // 2 Corinthians - Comfort and strength
+                    ['2cor', 12, 9], // My grace is sufficient
+
+                    // James - Wisdom
+                    ['jas', 1, 5],   // God gives wisdom generously
+                ];
+
+                // Extract the verses from the Bible data
+                positiveVerses = [];
+
+                curatedVerses.forEach(([bookId, chapterNum, verseNum]) => {
+                    const book = bibleData.find(b => b.id === bookId);
+                    if (book && book.chapters[chapterNum - 1] && book.chapters[chapterNum - 1][verseNum - 1]) {
+                        positiveVerses.push({
+                            text: book.chapters[chapterNum - 1][verseNum - 1],
+                            bookName: bookNames[bookId] || bookId,
+                            chapter: chapterNum,
+                            verse: verseNum
+                        });
+                    }
+                });
+
+                isLoading = false;
+                console.log(`Loaded ${positiveVerses.length} handpicked positive verses`);
+            } catch (error) {
+                console.error('Error loading Bible data:', error);
+                isLoading = false;
+                alert('عذراً، حدث خطأ في تحميل البيانات. حاول تحديث الصفحة.');
+            }
+        }
+
+        // Load Bible data when page loads
+        window.addEventListener('DOMContentLoaded', loadBibleData);
+
+        // YouTube IFrame API Ready callback
+        function onYouTubeIframeAPIReady() {
+            console.log('YouTube IFrame API is ready');
+            playerReady = true;
+        }
+
+        // YouTube API Key - Get your free key from: https://console.cloud.google.com/apis/credentials
+        const YOUTUBE_API_KEY = 'AIzaSyCJwEwafmu6GGWkTAqFgZrIXoqiS5gtMJ8'; // Replace with your API key
+
+        // Map verse themes to Arabic search terms
+        const verseThemes = {
+            'love': 'ترنيمة محبة الله',
+            'peace': 'ترنيمة سلام المسيح',
+            'hope': 'ترنيمة رجاء',
+            'salvation': 'ترنيمة خلاص',
+            'grace': 'ترنيمة نعمة',
+            'shepherd': 'ترنيمة الراعي الصالح',
+            'comfort': 'ترنيمة تعزية',
+            'strength': 'ترنيمة قوة',
+            'joy': 'ترنيمة فرح',
+            'protection': 'ترنيمة حماية الرب'
+        };
+
+        function getSearchTermForVerse(verseText, bookName) {
+            const text = verseText.toLowerCase();
+
+            // Try to match themes from verse content
+            if (text.includes('محبة') || text.includes('حب')) return verseThemes.love;
+            if (text.includes('سلام')) return verseThemes.peace;
+            if (text.includes('رجاء') || text.includes('امل')) return verseThemes.hope;
+            if (text.includes('خلاص')) return verseThemes.salvation;
+            if (text.includes('نعمة')) return verseThemes.grace;
+            if (text.includes('راعي')) return verseThemes.shepherd;
+            if (text.includes('تعزية') || text.includes('عزاء')) return verseThemes.comfort;
+            if (text.includes('قوة')) return verseThemes.strength;
+            if (text.includes('فرح')) return verseThemes.joy;
+            if (text.includes('يحفظ') || text.includes('حماية')) return verseThemes.protection;
+
+            // Default to general praise
+            return 'ترنيمة مسيحية عربية';
+        }
+
+        // Curated list of known embeddable Arabic Christian hymns as fallbacks
+        const fallbackHymns = [
+            'PLqVGzuso_JF0pzqCJYqPvHlkMqnqMqEfB', // Arabic Christian Hymns playlist
+            'PLxJLKWC0HEY7YQZLNJQHlk8fFdLYX7c5r', // Arabic Worship Songs
+            'PLJgBa48KGmkGCLXlRr4yO7oNQQOyL5qQa', // Coptic Hymns
+        ];
+
+        // Player event handlers
+        function onPlayerReady(event) {
+            console.log('Player is ready');
+        }
+
+        function onPlayerError(event) {
+            console.error('Player error:', event.data);
+            // Error codes: 2 = invalid ID, 5 = HTML5 error, 100 = video not found, 101/150 = embedding not allowed
+            const videoContainer = document.getElementById('videoContainer');
+            if (event.data === 101 || event.data === 150) {
+                // Video cannot be embedded, try fallback playlist
+                console.log('Video embedding not allowed, using fallback playlist');
+                const randomPlaylist = fallbackHymns[Math.floor(Math.random() * fallbackHymns.length)];
+                if (player) {
+                    player.destroy();
+                }
+                player = new YT.Player('player', {
+                    height: '315',
+                    width: '560',
+                    playerVars: {
+                        'listType': 'playlist',
+                        'list': randomPlaylist,
+                        'playsinline': 1,
+                        'enablejsapi': 1
+                    }
+                });
+            }
+        }
+
+        async function searchYouTubeHymn(searchTerm) {
+            try {
+                // Search for videos with embeddable filter
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchTerm)}&type=video&videoEmbeddable=true&videoSyndicated=true&maxResults=10&key=${YOUTUBE_API_KEY}`
+                );
+
+                if (!response.ok) {
+                    console.error('YouTube API response not OK:', response.status);
+                    throw new Error('YouTube API error');
+                }
+
+                const data = await response.json();
+                console.log('YouTube API response:', data);
+
+                if (data.items && data.items.length > 0) {
+                    // Try to get a video that works
+                    for (let i = 0; i < Math.min(5, data.items.length); i++) {
+                        const item = data.items[i];
+                        const videoId = item.id?.videoId;
+
+                        if (videoId) {
+                            console.log('Found video:', videoId);
+                            return { type: 'video', id: videoId };
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('YouTube search error:', error);
+            }
+
+            // Fallback: Use a random playlist from curated list
+            const randomPlaylist = fallbackHymns[Math.floor(Math.random() * fallbackHymns.length)];
+            console.log('Using fallback playlist:', randomPlaylist);
+            return { type: 'playlist', id: randomPlaylist };
+        }
+
+        async function getRandomVerse() {
+            if (isLoading) {
+                alert('جاري تحميل البيانات، يرجى الانتظار...');
+                return;
+            }
+
+            if (positiveVerses.length === 0) {
+                alert('عذراً، حدث خطأ في تحميل البيانات. حاول تحديث الصفحة.');
+                return;
+            }
+
+            const verseContainer = document.getElementById('verseContainer');
+            const verseContent = document.getElementById('verseContent');
+            const videoContainer = document.getElementById('videoContainer');
+            const btn = document.getElementById('getVerseBtn');
+
+            // Show loading state
+            btn.disabled = true;
+            verseContainer.classList.add('show');
+            verseContent.innerHTML = '<div class="loading">جاري البحث عن رسالة الله لك...</div>';
+            videoContainer.innerHTML = '';
+
+            try {
+                // Pick a random verse from the pre-filtered positive verses
+                const randomVerse = positiveVerses[Math.floor(Math.random() * positiveVerses.length)];
+
+                // Display the verse
+                displayVerse(randomVerse.text, randomVerse.bookName, randomVerse.chapter, randomVerse.verse);
+
+                // Search for related hymn
+                const searchTerm = getSearchTermForVerse(randomVerse.text, randomVerse.bookName);
+                videoContainer.innerHTML = '<div class="loading">جاري البحث عن ترنيمة...</div>';
+
+                const videoData = await searchYouTubeHymn(searchTerm);
+                console.log('Loading video:', videoData);
+
+                // Create placeholder div for YouTube player
+                videoContainer.innerHTML = `
+                    <div id="player"></div>
+                    <div style="margin-top: 15px; font-size: 14px; color: #666;">
+                        <em>ترنيمة مرتبطة بالآية</em>
+                    </div>
+                `;
+
+                // Wait for YouTube API to be ready
+                if (!playerReady) {
+                    videoContainer.innerHTML = '<div class="loading">جاري تحميل مشغل الفيديو...</div>';
+                    // Wait up to 5 seconds for API to load
+                    for (let i = 0; i < 50; i++) {
+                        if (playerReady) break;
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+                    videoContainer.innerHTML = `
+                        <div id="player"></div>
+                        <div style="margin-top: 15px; font-size: 14px; color: #666;">
+                            <em>ترنيمة مرتبطة بالآية</em>
+                        </div>
+                    `;
+                }
+
+                // Destroy existing player if any
+                if (player) {
+                    player.destroy();
+                }
+
+                // Create new player using IFrame Player API
+                if (videoData.type === 'video') {
+                    player = new YT.Player('player', {
+                        height: '315',
+                        width: '560',
+                        videoId: videoData.id,
+                        playerVars: {
+                            'playsinline': 1,
+                            'rel': 0,
+                            'enablejsapi': 1
+                        },
+                        events: {
+                            'onReady': onPlayerReady,
+                            'onError': onPlayerError
+                        }
+                    });
+                } else if (videoData.type === 'playlist') {
+                    player = new YT.Player('player', {
+                        height: '315',
+                        width: '560',
+                        playerVars: {
+                            'listType': 'playlist',
+                            'list': videoData.id,
+                            'playsinline': 1,
+                            'rel': 0,
+                            'enablejsapi': 1
+                        },
+                        events: {
+                            'onReady': onPlayerReady,
+                            'onError': onPlayerError
+                        }
+                    });
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                verseContent.innerHTML = '<div class="error">عذراً، حدث خطأ. حاول مرة أخرى.</div>';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function displayVerse(verseText, bookName, chapter, verse) {
+            const verseContent = document.getElementById('verseContent');
+            verseContent.innerHTML = `
+                <div class="verse-text">
+                    ${verseText}
+                </div>
+                <div class="verse-reference">
+                    ${bookName} ${chapter}:${verse}
+                </div>
+            `;
+        }
+
+    </script>
 </body>
 </html>
