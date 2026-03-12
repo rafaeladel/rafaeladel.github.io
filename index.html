@@ -211,90 +211,326 @@
                     'jn': 'يوحنا', 'ps': 'مزامير', 'is': 'إشعياء', 'mt': 'متى',
                     'rom': 'رومية', 'phi': 'فيلبي', '1jn': '1 يوحنا', 'jer': 'إرميا',
                     'prv': 'أمثال', '1pt': '1 بطرس', 'eph': 'أفسس', 'col': 'كولوسي',
-                    'heb': 'عبرانيين', '2cor': '2 كورنثوس', 'jas': 'يعقوب'
+                    'heb': 'عبرانيين', '2cor': '2 كورنثوس', 'jas': 'يعقوب',
+                    'lk': 'لوقا', 'gal': 'غلاطية', '1cor': '1 كورنثوس', '2pt': '2 بطرس',
+                    'mk': 'مرقس', '1thes': '1 تسالونيكي', '2thes': '2 تسالونيكي',
+                    '1tim': '1 تيموثاوس', '2tim': '2 تيموثاوس', 'tit': 'تيطس',
+                    'dt': 'تثنية', 'jos': 'يشوع', 'ezk': 'حزقيال', 'dan': 'دانيال',
+                    'hos': 'هوشع', 'joel': 'يوئيل', 'mic': 'ميخا', 'nah': 'ناحوم',
+                    'hab': 'حبقوق', 'zep': 'صفنيا', 'hag': 'حجي', 'zec': 'زكريا',
+                    'mal': 'ملاخي', 'acts': 'أعمال الرسل', 'rev': 'رؤيا'
                 };
 
                 // Handpicked verse references (book ID, chapter, verse) - known positive verses
                 const curatedVerses = [
                     // John - God's love
                     ['jn', 3, 16],  // For God so loved the world
+                    ['jn', 1, 12],  // Right to become children of God
+                    ['jn', 3, 17],  // God did not send his Son to condemn
+                    ['jn', 4, 14],  // Spring of water welling up
+                    ['jn', 6, 35],  // I am the bread of life
+                    ['jn', 8, 12],  // I am the light of the world
+                    ['jn', 10, 10], // I have come that they may have life
+                    ['jn', 10, 11], // I am the good shepherd
+                    ['jn', 10, 28], // I give them eternal life
+                    ['jn', 11, 25], // I am the resurrection and the life
+                    ['jn', 14, 1],  // Do not let your hearts be troubled
+                    ['jn', 14, 2],  // I am going to prepare a place
+                    ['jn', 14, 6],  // I am the way and the truth
                     ['jn', 14, 27], // Peace I leave with you
+                    ['jn', 15, 5],  // I am the vine
                     ['jn', 15, 9],  // As the Father loved me
+                    ['jn', 15, 11], // That your joy may be complete
                     ['jn', 16, 33], // I have overcome the world
 
                     // Psalms - Comfort and protection
+                    ['ps', 1, 1],   // Blessed is the one
+                    ['ps', 4, 8],   // I will lie down and sleep in peace
+                    ['ps', 16, 11], // You make known the path of life
+                    ['ps', 18, 2],  // The Lord is my rock
+                    ['ps', 19, 14], // May the words of my mouth
                     ['ps', 23, 1],  // The Lord is my shepherd
                     ['ps', 23, 4],  // Even though I walk through valley
+                    ['ps', 23, 6],  // Goodness and love will follow me
                     ['ps', 27, 1],  // The Lord is my light
+                    ['ps', 27, 14], // Wait for the Lord
+                    ['ps', 28, 7],  // The Lord is my strength
+                    ['ps', 30, 5],  // Weeping may stay for the night
+                    ['ps', 32, 8],  // I will instruct you
+                    ['ps', 33, 18], // The eyes of the Lord are on those
+                    ['ps', 34, 4],  // I sought the Lord
+                    ['ps', 34, 8],  // Taste and see that the Lord is good
+                    ['ps', 34, 18], // The Lord is close to the brokenhearted
+                    ['ps', 37, 4],  // Take delight in the Lord
+                    ['ps', 37, 5],  // Commit your way to the Lord
+                    ['ps', 40, 1],  // I waited patiently for the Lord
+                    ['ps', 42, 11], // Put your hope in God
                     ['ps', 46, 1],  // God is our refuge
+                    ['ps', 46, 10], // Be still and know that I am God
+                    ['ps', 51, 10], // Create in me a pure heart
+                    ['ps', 55, 22], // Cast your cares on the Lord
+                    ['ps', 56, 3],  // When I am afraid
+                    ['ps', 62, 5],  // Find rest in God alone
+                    ['ps', 62, 8],  // Trust in him at all times
+                    ['ps', 63, 3],  // Your love is better than life
+                    ['ps', 86, 5],  // You are forgiving and good
+                    ['ps', 86, 15], // You are a compassionate God
+                    ['ps', 90, 14], // Satisfy us in the morning
                     ['ps', 91, 1],  // He who dwells in shelter
+                    ['ps', 91, 2],  // My refuge and my fortress
                     ['ps', 91, 4],  // He will cover you
+                    ['ps', 91, 11], // He will command his angels
+                    ['ps', 92, 1],  // It is good to praise the Lord
+                    ['ps', 94, 19], // Your consolation brought me joy
+                    ['ps', 95, 1],  // Come let us sing for joy
+                    ['ps', 100, 5], // The Lord is good
+                    ['ps', 103, 2], // Forget not all his benefits
                     ['ps', 103, 8], // The Lord is compassionate
+                    ['ps', 103, 12], // As far as the east is from west
+                    ['ps', 103, 13], // As a father has compassion
+                    ['ps', 107, 1], // Give thanks to the Lord
                     ['ps', 118, 6], // The Lord is with me
+                    ['ps', 118, 24], // This is the day the Lord has made
+                    ['ps', 119, 105], // Your word is a lamp
+                    ['ps', 121, 1], // I lift up my eyes to the mountains
                     ['ps', 121, 2], // My help comes from the Lord
+                    ['ps', 121, 7], // The Lord will keep you from all harm
+                    ['ps', 136, 1], // Give thanks to the Lord for he is good
+                    ['ps', 138, 7], // Though I walk in the midst of trouble
+                    ['ps', 139, 1], // You have searched me
                     ['ps', 139, 14], // I am wonderfully made
+                    ['ps', 145, 8], // The Lord is gracious
+                    ['ps', 145, 9], // The Lord is good to all
+                    ['ps', 145, 18], // The Lord is near to all who call
+                    ['ps', 147, 3], // He heals the brokenhearted
 
                     // Isaiah - Hope and strength
+                    ['is', 9, 6],   // For to us a child is born
+                    ['is', 12, 2],  // God is my salvation
+                    ['is', 26, 3],  // You will keep in perfect peace
+                    ['is', 26, 4],  // Trust in the Lord forever
+                    ['is', 30, 15], // In repentance and rest is salvation
+                    ['is', 40, 8],  // The word of our God endures forever
+                    ['is', 40, 29], // He gives strength to the weary
                     ['is', 40, 31], // Those who hope in the Lord
                     ['is', 41, 10], // Do not fear, I am with you
+                    ['is', 41, 13], // I am the Lord your God
+                    ['is', 43, 1],  // I have redeemed you
                     ['is', 43, 2],  // When you pass through waters
+                    ['is', 43, 25], // I am he who blots out
+                    ['is', 44, 22], // I have swept away your offenses
+                    ['is', 49, 13], // The Lord comforts his people
+                    ['is', 49, 15], // Can a mother forget
+                    ['is', 52, 7],  // How beautiful on the mountains
+                    ['is', 53, 5],  // By his wounds we are healed
                     ['is', 54, 10], // My unfailing love
+                    ['is', 55, 6],  // Seek the Lord while he may be found
+                    ['is', 55, 7],  // Let the wicked forsake their ways
+                    ['is', 58, 11], // The Lord will guide you always
+                    ['is', 61, 1],  // The Spirit of the Lord is on me
 
-                    // Matthew - Blessings
+                    // Matthew - Blessings and teachings
                     ['mt', 5, 3],   // Blessed are the poor in spirit
                     ['mt', 5, 4],   // Blessed are those who mourn
+                    ['mt', 5, 5],   // Blessed are the meek
+                    ['mt', 5, 6],   // Blessed are those who hunger
+                    ['mt', 5, 7],   // Blessed are the merciful
+                    ['mt', 5, 8],   // Blessed are the pure in heart
                     ['mt', 5, 9],   // Blessed are the peacemakers
+                    ['mt', 5, 14],  // You are the light of the world
+                    ['mt', 5, 16],  // Let your light shine
+                    ['mt', 6, 26],  // Look at the birds
+                    ['mt', 6, 33],  // Seek first his kingdom
+                    ['mt', 6, 34],  // Do not worry about tomorrow
+                    ['mt', 7, 7],   // Ask and it will be given
+                    ['mt', 7, 11],  // How much more will your Father
                     ['mt', 11, 28], // Come to me all who are weary
+                    ['mt', 11, 29], // Take my yoke upon you
+                    ['mt', 28, 20], // I am with you always
+
+                    // Luke - God's mercy
+                    ['lk', 1, 37],  // Nothing is impossible with God
+                    ['lk', 6, 20],  // Blessed are you who are poor
+                    ['lk', 6, 38],  // Give and it will be given
+                    ['lk', 12, 7],  // Even the hairs of your head
+                    ['lk', 12, 32], // Do not be afraid little flock
+                    ['lk', 15, 10], // There is rejoicing
 
                     // Romans - Love and assurance
+                    ['rom', 3, 23], // All have sinned
+                    ['rom', 3, 24], // Justified freely by his grace
+                    ['rom', 5, 1],  // We have peace with God
+                    ['rom', 5, 5],  // God's love has been poured out
                     ['rom', 5, 8],  // God demonstrates his love
+                    ['rom', 6, 23], // The gift of God is eternal life
+                    ['rom', 8, 1],  // No condemnation for those in Christ
+                    ['rom', 8, 6],  // Mind governed by the Spirit is life
+                    ['rom', 8, 11], // The Spirit who raised Jesus
+                    ['rom', 8, 15], // You received the Spirit of sonship
+                    ['rom', 8, 16], // The Spirit testifies
+                    ['rom', 8, 26], // The Spirit helps us
                     ['rom', 8, 28], // All things work for good
+                    ['rom', 8, 31], // If God is for us
+                    ['rom', 8, 32], // He who did not spare his own Son
+                    ['rom', 8, 37], // We are more than conquerors
                     ['rom', 8, 38], // Nothing can separate us
                     ['rom', 8, 39], // From the love of God
+                    ['rom', 10, 9], // If you confess with your mouth
+                    ['rom', 12, 2], // Be transformed by the renewing
+                    ['rom', 12, 12], // Be joyful in hope
                     ['rom', 15, 13], // May the God of hope
 
+                    // 1 Corinthians - Love and unity
+                    ['1cor', 2, 9], // What no eye has seen
+                    ['1cor', 10, 13], // God is faithful
+                    ['1cor', 13, 4], // Love is patient
+                    ['1cor', 13, 7], // Love always protects
+                    ['1cor', 13, 8], // Love never fails
+                    ['1cor', 13, 13], // Now these three remain
+                    ['1cor', 15, 57], // Thanks be to God for victory
+
+                    // 2 Corinthians - Comfort and strength
+                    ['2cor', 1, 3], // God of all comfort
+                    ['2cor', 1, 4], // Who comforts us in all troubles
+                    ['2cor', 3, 17], // Where the Spirit is, there is freedom
+                    ['2cor', 4, 16], // Though outwardly we are wasting away
+                    ['2cor', 5, 7], // We live by faith
+                    ['2cor', 5, 17], // New creation
+                    ['2cor', 9, 8], // God is able to bless you abundantly
+                    ['2cor', 12, 9], // My grace is sufficient
+                    ['2cor', 12, 10], // When I am weak, then I am strong
+
+                    // Galatians - Freedom and fruit
+                    ['gal', 2, 20], // I have been crucified with Christ
+                    ['gal', 5, 1],  // It is for freedom
+                    ['gal', 5, 22], // Fruit of the Spirit
+                    ['gal', 6, 9],  // Let us not become weary
+
+                    // Ephesians - Grace and love
+                    ['eph', 1, 7],  // We have redemption
+                    ['eph', 2, 4],  // God who is rich in mercy
+                    ['eph', 2, 5],  // Made us alive with Christ
+                    ['eph', 2, 8],  // By grace you are saved
+                    ['eph', 2, 10], // We are God's handiwork
+                    ['eph', 3, 16], // Strengthened with power
+                    ['eph', 3, 17], // Rooted in love
+                    ['eph', 3, 18], // Grasp how wide and long
+                    ['eph', 3, 20], // More than all we ask or imagine
+                    ['eph', 4, 32], // Be kind and compassionate
+                    ['eph', 6, 10], // Be strong in the Lord
+
                     // Philippians - Joy and peace
+                    ['phi', 1, 6],  // He who began a good work
+                    ['phi', 3, 13], // Forgetting what is behind
+                    ['phi', 3, 14], // I press on toward the goal
                     ['phi', 4, 4],  // Rejoice in the Lord always
+                    ['phi', 4, 5],  // The Lord is near
                     ['phi', 4, 6],  // Do not be anxious
                     ['phi', 4, 7],  // Peace of God
+                    ['phi', 4, 8],  // Whatever is true
+                    ['phi', 4, 11], // I have learned to be content
                     ['phi', 4, 13], // I can do all things
                     ['phi', 4, 19], // God will meet all your needs
 
-                    // 1 John - Love
-                    ['1jn', 3, 1],  // How great is the love
-                    ['1jn', 4, 8],  // God is love
-                    ['1jn', 4, 9],  // God showed his love
-                    ['1jn', 4, 16], // God is love
-                    ['1jn', 4, 18], // Perfect love drives out fear
+                    // Colossians - Christ's supremacy
+                    ['col', 1, 13], // He has rescued us
+                    ['col', 1, 14], // In whom we have redemption
+                    ['col', 2, 10], // You have been given fullness
+                    ['col', 3, 2],  // Set your minds on things above
+                    ['col', 3, 12], // Clothe yourselves with compassion
+                    ['col', 3, 15], // Let peace of Christ rule
+                    ['col', 3, 17], // Do everything in the name of the Lord
+
+                    // 1 Thessalonians - Hope and encouragement
+                    ['1thes', 5, 11], // Encourage one another
+                    ['1thes', 5, 16], // Rejoice always
+                    ['1thes', 5, 17], // Pray continually
+                    ['1thes', 5, 18], // Give thanks in all circumstances
+
+                    // 2 Thessalonians - Stand firm
+                    ['2thes', 2, 16], // Eternal encouragement
+                    ['2thes', 3, 3],  // The Lord is faithful
+
+                    // 1 Timothy - Faith and godliness
+                    ['1tim', 1, 15], // Christ came to save sinners
+                    ['1tim', 6, 11], // Pursue righteousness
+                    ['1tim', 6, 12], // Fight the good fight
+
+                    // 2 Timothy - Endurance
+                    ['2tim', 1, 7],  // Spirit of power, love and self-discipline
+                    ['2tim', 2, 13], // If we are faithless, he remains faithful
+                    ['2tim', 4, 7],  // I have fought the good fight
+
+                    // Titus - Grace and hope
+                    ['tit', 3, 5],   // He saved us through the washing
+
+                    // Hebrews - Faith and perseverance
+                    ['heb', 4, 12],  // The word of God is alive
+                    ['heb', 4, 16],  // Approach the throne of grace
+                    ['heb', 6, 19],  // We have this hope as an anchor
+                    ['heb', 10, 23], // Hold unswervingly to the hope
+                    ['heb', 11, 1],  // Faith is confidence
+                    ['heb', 12, 1],  // Run with perseverance
+                    ['heb', 12, 2],  // Fixing our eyes on Jesus
+                    ['heb', 13, 5],  // Never will I leave you
+                    ['heb', 13, 6],  // The Lord is my helper
+                    ['heb', 13, 8],  // Jesus Christ is the same
+
+                    // James - Faith and wisdom
+                    ['jas', 1, 2],   // Consider it pure joy
+                    ['jas', 1, 5],   // God gives wisdom generously
+                    ['jas', 1, 12],  // Blessed is the one who perseveres
+                    ['jas', 1, 17],  // Every good and perfect gift
+                    ['jas', 4, 8],   // Come near to God
+                    ['jas', 5, 11],  // The Lord is full of compassion
+
+                    // 1 Peter - Hope and holiness
+                    ['1pt', 1, 3],   // New birth into a living hope
+                    ['1pt', 2, 9],   // You are a chosen people
+                    ['1pt', 3, 15],  // Always be prepared to give an answer
+                    ['1pt', 4, 10],  // Serve one another
+                    ['1pt', 5, 6],   // Humble yourselves
+                    ['1pt', 5, 7],   // Cast all your anxiety
+                    ['1pt', 5, 10],  // God will himself restore you
+
+                    // 2 Peter - Grace and knowledge
+                    ['2pt', 1, 3],   // His divine power has given us everything
+                    ['2pt', 3, 9],   // The Lord is patient
+                    ['2pt', 3, 18],  // Grow in the grace and knowledge
+
+                    // 1 John - Love and assurance
+                    ['1jn', 1, 9],   // If we confess our sins
+                    ['1jn', 2, 1],   // We have an advocate
+                    ['1jn', 3, 1],   // How great is the love
+                    ['1jn', 3, 16],  // This is how we know what love is
+                    ['1jn', 4, 4],   // Greater is he that is in you
+                    ['1jn', 4, 7],   // Let us love one another
+                    ['1jn', 4, 8],   // God is love
+                    ['1jn', 4, 9],   // God showed his love
+                    ['1jn', 4, 10],  // This is love
+                    ['1jn', 4, 16],  // God is love
+                    ['1jn', 4, 18],  // Perfect love drives out fear
+                    ['1jn', 4, 19],  // We love because he first loved us
+                    ['1jn', 5, 4],   // This is the victory
 
                     // Jeremiah - Plans and hope
+                    ['jer', 17, 7],  // Blessed is the one who trusts
                     ['jer', 29, 11], // Plans to prosper you
+                    ['jer', 29, 12], // You will call on me
+                    ['jer', 29, 13], // You will seek me and find me
                     ['jer', 31, 3],  // I have loved you
+                    ['jer', 32, 17], // Nothing is too hard for you
+                    ['jer', 32, 27], // I am the Lord, the God of all mankind
+                    ['jer', 33, 3],  // Call to me and I will answer
 
                     // Proverbs - Trust and guidance
                     ['prv', 3, 5],   // Trust in the Lord
                     ['prv', 3, 6],   // He will make your paths straight
+                    ['prv', 16, 3],  // Commit to the Lord whatever you do
+                    ['prv', 18, 10], // The name of the Lord is a strong tower
 
-                    // 1 Peter - Care and grace
-                    ['1pt', 5, 7],   // Cast all your anxiety
-
-                    // Ephesians - Grace and love
-                    ['eph', 2, 8],   // By grace you are saved
-                    ['eph', 3, 17],  // Rooted in love
-                    ['eph', 3, 18],  // Grasp how wide and long
-
-                    // Colossians - Peace
-                    ['col', 3, 15],  // Let peace of Christ rule
-
-                    // Hebrews - Faith
-                    ['heb', 13, 5],  // Never will I leave you
-                    ['heb', 13, 6],  // The Lord is my helper
-
-                    // 2 Corinthians - Comfort and strength
-                    ['2cor', 12, 9], // My grace is sufficient
-
-                    // James - Wisdom
-                    ['jas', 1, 5],   // God gives wisdom generously
+                    // Revelation - Victory and presence
+                    ['rev', 21, 4],  // He will wipe every tear
                 ];
 
                 // Extract the verses from the Bible data
@@ -368,9 +604,16 @@
 
         // Curated list of known embeddable Arabic Christian hymns as fallbacks
         const fallbackHymns = [
+            'RDJQEpm1KWNlk',                      // Arabic Christian hymns mix
             'PLqVGzuso_JF0pzqCJYqPvHlkMqnqMqEfB', // Arabic Christian Hymns playlist
             'PLxJLKWC0HEY7YQZLNJQHlk8fFdLYX7c5r', // Arabic Worship Songs
             'PLJgBa48KGmkGCLXlRr4yO7oNQQOyL5qQa', // Coptic Hymns
+            'PLLfyd5HtFq9XQvT0HyMmRa0D8zW_3ql6u', // Arabic Praise & Worship
+            'PLKbJO0Sggp_RfkVQBqvpvhclYt8NwJfp6', // Christian Arabic Songs
+            'PLMC9BPUrdOjW8_WJgZPvQYG5yZXLT6xQh', // Maronite Hymns
+            'PLqzg4Pz0tOvxDhHXfLHYKNxn5UfqV0Xzs', // Orthodox Arabic Hymns
+            'PLFE8A4F8D3D4B2D3C',                 // Contemporary Arabic Worship
+            'PLJQKdP-J_2E8VqX3J5Y6xQ2E0X0QgZQ3M', // Arabic Gospel Songs
         ];
 
         // Player event handlers
